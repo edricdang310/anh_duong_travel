@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anh-duong-travel-web
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    # Nếu bạn có file .env muốn load vào service này, hãy uncomment dòng bên dưới
+    # env_file:
+    #   - .env
