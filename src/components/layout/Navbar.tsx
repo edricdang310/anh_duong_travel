@@ -87,11 +87,8 @@ export function Navbar() {
 
                     {/* Desktop CTA */}
                     <div className="hidden lg:flex items-center gap-3">
-                        <Button asChild variant="outline" size="sm">
-                            <Link href="/contact">Tư vấn miễn phí</Link>
-                        </Button>
                         <Button asChild size="sm">
-                            <Link href="/tours">Đặt tour ngay</Link>
+                            <Link href="/contact">Tư vấn miễn phí</Link>
                         </Button>
                     </div>
 
@@ -131,12 +128,9 @@ export function Navbar() {
                                         </Link>
                                     ))}
                                 </nav>
-                                <div className="mt-6 flex flex-col gap-3 pt-4 border-t">
-                                    <Button asChild variant="outline" className="w-full" onClick={() => setMobileOpen(false)}>
+                                <div className="mt-8 flex flex-col gap-3 pt-6 pb-4 border-t px-4">
+                                    <Button asChild className="w-full" size="lg" onClick={() => setMobileOpen(false)}>
                                         <Link href="/contact">Tư vấn miễn phí</Link>
-                                    </Button>
-                                    <Button asChild className="w-full" onClick={() => setMobileOpen(false)}>
-                                        <Link href="/tours">Đặt tour ngay</Link>
                                     </Button>
                                 </div>
                             </div>

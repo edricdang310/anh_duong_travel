@@ -3,8 +3,6 @@ import type { Tour, Destination, BlogPost, Testimonial, Feature } from "@/types"
 
 export const navLinks: NavItem[] = [
     { label: "Trang chủ", href: "/" },
-    { label: "Tours", href: "/tours" },
-    { label: "Điểm đến", href: "/destinations" },
     { label: "Về chúng tôi", href: "/about" },
     { label: "Blog", href: "/blog" },
     { label: "Liên hệ", href: "/contact" },
@@ -17,12 +15,7 @@ export const footerQuickLinks = [
     { label: "Liên hệ", href: "/contact" },
 ];
 
-export const footerTourLinks = [
-    { label: "Tour trong nước", href: "/tours" },
-    { label: "Tour nước ngoài", href: "/tours" },
-    { label: "Tour mạo hiểm", href: "/tours" },
-    { label: "Tour nghỉ dưỡng", href: "/tours" },
-];
+
 
 export const mockTours: Tour[] = [
     {

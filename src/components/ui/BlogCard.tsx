@@ -18,9 +18,9 @@ function formatDate(dateString: string): string {
 
 export function BlogCard({ post }: BlogCardProps) {
     return (
-        <Card className="group overflow-hidden rounded-2xl border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-0">
+        <Card className="group overflow-hidden rounded-2xl border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-0 flex flex-col h-full w-full">
             {/* Thumbnail */}
-            <Link href={`/blog/${post.slug}`} aria-label={`Đọc bài viết: ${post.title}`} tabIndex={-1}>
+            <Link href={`/blog/${post.slug}`} aria-label={`Đọc bài viết: ${post.title}`} tabIndex={-1} className="flex-shrink-0">
                 <div className="relative h-48 overflow-hidden">
                     <Image
                         src={post.image}
@@ -36,7 +36,7 @@ export function BlogCard({ post }: BlogCardProps) {
                 </div>
             </Link>
 
-            <CardContent className="p-5 space-y-3">
+            <CardContent className="p-5 flex flex-col gap-3 flex-1">
                 {/* Meta */}
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
@@ -45,15 +45,15 @@ export function BlogCard({ post }: BlogCardProps) {
                 </div>
 
                 {/* Title */}
-                <h3 className="font-semibold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem]">
                     <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2 flex-1">{post.excerpt}</p>
 
                 {/* Author */}
-                <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+                <div className="flex items-center gap-2 pt-2 mt-auto border-t border-border/50">
                     <div className="relative w-7 h-7 rounded-full overflow-hidden bg-muted flex-shrink-0">
                         <Image
                             src={post.author.avatar}

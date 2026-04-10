@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -101,7 +101,7 @@ const categoryColors: Record<string, string> = {
 
 function ActivityCard({ post }: { post: ActivityPost }) {
     return (
-        <article className="group bg-white rounded-2xl overflow-hidden border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
+        <article className="group bg-white rounded-2xl overflow-hidden border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full w-full">
             {/* Thumbnail */}
             <div className="relative h-52 overflow-hidden flex-shrink-0">
                 <Image
@@ -134,7 +134,7 @@ function ActivityCard({ post }: { post: ActivityPost }) {
                 </div>
 
                 {/* Title */}
-                <h3 className="font-bold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                <h3 className="font-bold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem]">
                     {post.title}
                 </h3>
 
@@ -161,123 +161,90 @@ function ActivityCard({ post }: { post: ActivityPost }) {
 }
 
 export function OurActivitiesSection() {
-    const [current, setCurrent] = useState(0);
-    const total = activityPosts.length;
-    const perView = 3; // cards visible at once on desktop
-    const maxIndex = total - perView; // 0..3
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const prev = () => setCurrent((c) => Math.max(c - 1, 0));
-    const next = () => setCurrent((c) => Math.min(c + 1, maxIndex));
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
 
-    // Each card: (100% - 2 gaps) / 3. Gap = 24px (gap-6)
-    const cardWidthPercent = 100 / perView;
-    const gapPx = 24;
-    const translateX = current * (cardWidthPercent / 100) * 100;
-    // Offset in calc: move by (card% + gap) per step
-    const offset = `calc(-${current} * (${100 / perView}% + ${gapPx}px))`;
+        let animationId: number;
+        let isPaused = false;
+        let lastTime = 0;
+        const PixelsPerSecond = 40; // Tốc độ trượt (px/s)
 
-    const dotCount = maxIndex + 1; // 4 dots for 6 cards / 3 visible
+        const scroll = (time: number) => {
+            if (!container) return;
+            
+            if (lastTime !== 0 && !isPaused && container.scrollWidth > container.clientWidth) {
+                const deltaTime = time - lastTime;
+                container.scrollLeft += (PixelsPerSecond * deltaTime) / 1000;
+                
+                // Quay lại đầu khi cuộn đến sát mép cuối
+                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
+                    container.scrollLeft = 0;
+                }
+            }
+            
+            lastTime = time;
+            animationId = requestAnimationFrame(scroll);
+        };
+
+        animationId = requestAnimationFrame(scroll);
+
+        // Tạm dừng cuộn khi người dùng chạm vào (để cuộn thủ công) hoặc rê chuột
+        const handleInteractionStart = () => { isPaused = true; };
+        const handleInteractionEnd = () => {
+            isPaused = false;
+            lastTime = performance.now(); // Tránh bị nhảy khung hình sau khi tạm dừng
+        };
+
+        container.addEventListener("mouseenter", handleInteractionStart);
+        container.addEventListener("mouseleave", handleInteractionEnd);
+        container.addEventListener("touchstart", handleInteractionStart, { passive: true });
+        container.addEventListener("touchend", handleInteractionEnd);
+
+        return () => {
+            cancelAnimationFrame(animationId);
+            container.removeEventListener("mouseenter", handleInteractionStart);
+            container.removeEventListener("mouseleave", handleInteractionEnd);
+            container.removeEventListener("touchstart", handleInteractionStart);
+            container.removeEventListener("touchend", handleInteractionEnd);
+        };
+    }, []);
 
     return (
         <section className="section-padding bg-muted/40" aria-labelledby="activities-heading">
             <div className="section-container">
                 {/* Header */}
-                <div className="text-center max-w-2xl mx-auto mb-12">
-                    <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">
+                <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+                    <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-2 sm:mb-3">
                         🗺 Hoạt động của chúng tôi
                     </p>
-                    <h2 id="activities-heading" className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                    <h2 id="activities-heading" className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
                         Những Chuyến Đi Chúng Tôi Đã Tổ Chức
                     </h2>
-                    <p className="text-muted-foreground text-lg leading-relaxed">
+                    <p className="text-muted-foreground text-sm sm:text-lg leading-relaxed">
                         Ánh Dương Travel chuyên nhận tổ chức tour trọn gói cho doanh nghiệp, trường học và các đoàn có nhu cầu. Dưới đây là một số hành trình tiêu biểu mà chúng tôi đã thực hiện.
                     </p>
                 </div>
 
                 {/* Carousel wrapper */}
-                <div className="relative">
-                    {/* Sliding track */}
-                    <div style={{ overflowX: "clip" }} className="pb-4 -mb-4">
+                <div 
+                    ref={scrollContainerRef}
+                    className="flex overflow-x-auto hide-scrollbar sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-4 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0"
+                >
+                    {activityPosts.map((post) => (
                         <div
-                            className="flex gap-6 transition-transform duration-500 ease-in-out"
-                            style={{ transform: `translateX(${offset})` }}
+                            key={post.id}
+                            className="w-[62vw] min-w-[240px] sm:w-auto sm:min-w-[280px] lg:min-w-0 shrink-0 h-full flex flex-col"
                         >
-                            {activityPosts.map((post) => (
-                                <div
-                                    key={post.id}
-                                    className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
-                                >
-                                    <ActivityCard post={post} />
-                                </div>
-                            ))}
+                            <ActivityCard post={post} />
                         </div>
-                    </div>
-
-                    {/* Desktop arrows */}
-                    <button
-                        onClick={prev}
-                        disabled={current === 0}
-                        aria-label="Trước"
-                        className="absolute -left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-border shadow-md items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 z-10 hidden sm:flex disabled:opacity-30 disabled:pointer-events-none"
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button
-                        onClick={next}
-                        disabled={current >= maxIndex}
-                        aria-label="Tiếp"
-                        className="absolute -right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-border shadow-md items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 z-10 hidden sm:flex disabled:opacity-30 disabled:pointer-events-none"
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Dots + mobile arrows */}
-                <div className="flex items-center justify-center gap-4 mt-8">
-                    <button
-                        onClick={prev}
-                        disabled={current === 0}
-                        aria-label="Trước"
-                        className="sm:hidden w-9 h-9 rounded-full bg-white border border-border shadow flex items-center justify-center hover:bg-primary hover:text-white transition-all disabled:opacity-30 disabled:pointer-events-none"
-                    >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                        {Array.from({ length: dotCount }).map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setCurrent(i)}
-                                aria-label={`Vị trí ${i + 1}`}
-                                className={`rounded-full transition-all duration-300 ${
-                                    i === current
-                                        ? "w-7 h-3 bg-primary"
-                                        : "w-3 h-3 bg-border hover:bg-primary/40"
-                                }`}
-                            />
-                        ))}
-                    </div>
-
-                    <button
-                        onClick={next}
-                        disabled={current >= maxIndex}
-                        aria-label="Tiếp"
-                        className="sm:hidden w-9 h-9 rounded-full bg-white border border-border shadow flex items-center justify-center hover:bg-primary hover:text-white transition-all disabled:opacity-30 disabled:pointer-events-none"
-                    >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+                    ))}
                 </div>
 
                 {/* View more */}
-                <div className="text-center mt-10">
+                <div className="text-center mt-8 sm:mt-12">
                     <Button asChild variant="outline" size="lg" className="rounded-full px-8">
                         <Link href="/hoat-dong">
                             Xem tất cả hoạt động

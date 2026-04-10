@@ -57,7 +57,7 @@ export function CTABookingSection() {
                         className="bg-white hover:bg-white/90 text-base px-10 py-6 rounded-full font-bold shadow-2xl hover:scale-105 transition-all duration-300"
                         style={{ color: "oklch(0.20 0.08 68)" }}
                     >
-                        <Link href="/tours">Đặt Tour Ngay</Link>
+                        <Link href="/contact">Liên Hệ Ngay</Link>
                     </Button>
                     <Button
                         asChild

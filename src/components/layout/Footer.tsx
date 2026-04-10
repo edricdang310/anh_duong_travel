@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/constants/site";
-import { footerQuickLinks, footerTourLinks } from "@/constants/navigation";
+import { footerQuickLinks } from "@/constants/navigation";
 import { Separator } from "@/components/ui/separator";
 
 export function Footer() {
@@ -12,7 +12,7 @@ export function Footer() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* Brand Column */}
-                    <div className="lg:col-span-1 space-y-4">
+                    <div className="lg:col-span-2 space-y-4">
                         <Link href="/" aria-label="Trang chủ Ánh Dương Travel">
                             <Image
                                 src="/images/logo/logo_ad.png"
@@ -82,52 +82,44 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    {/* Tours */}
-                    <div className="space-y-4">
-                        <h3 className="text-sm font-semibold text-background uppercase tracking-wider">
-                            Dịch vụ tours
-                        </h3>
-                        <ul className="space-y-2" role="list">
-                            {footerTourLinks.map((link) => (
-                                <li key={link.label}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-sm text-background/70 hover:text-background transition-colors inline-flex items-center gap-1 group"
-                                    >
-                                        <span className="text-primary group-hover:translate-x-0.5 transition-transform">›</span>
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
 
-                    {/* Contact */}
-                    <div className="space-y-4">
+                    {/* Contact - Corporate Identity */}
+                    <div className="space-y-5">
                         <h3 className="text-sm font-semibold text-background uppercase tracking-wider">
-                            Liên hệ
+                            Thông Tin Liên Hệ
                         </h3>
-                        <address className="not-italic space-y-3">
-                            <div className="flex items-start gap-2 text-sm text-background/70">
-                                <span className="mt-0.5" aria-hidden="true">📍</span>
-                                <span>{siteConfig.address}</span>
+                        <address className="not-italic space-y-4">
+                            <div className="flex items-start gap-3 text-sm text-background/80">
+                                <span className="mt-0.5 text-base" aria-hidden="true">🏢</span>
+                                <div>
+                                    <strong className="block text-background font-medium mb-1">Trụ sở chính</strong>
+                                    <span className="leading-relaxed">{siteConfig.address}</span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-background/70">
-                                <span aria-hidden="true">📞</span>
-                                <a href={`tel:${siteConfig.phone}`} className="hover:text-background transition-colors">
+
+                            <div className="flex items-start gap-3 text-sm text-background/80">
+                                <span className="mt-0.5 text-base" aria-hidden="true">📍</span>
+                                <div>
+                                    <strong className="block text-background font-medium mb-1">Văn phòng Miền Nam</strong>
+                                    <span className="leading-relaxed">{siteConfig.vpMienNam}</span>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-sm text-background/80">
+                                <span className="text-base" aria-hidden="true">📞</span>
+                                <a href={`tel:${siteConfig.phone.split('/')[0].replace(/\D/g, '')}`} className="hover:text-background transition-colors font-medium">
                                     {siteConfig.phone}
                                 </a>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-background/70">
-                                <span aria-hidden="true">✉️</span>
+
+                            <div className="flex items-center gap-3 text-sm text-background/80">
+                                <span className="text-base" aria-hidden="true">✉️</span>
                                 <a href={`mailto:${siteConfig.email}`} className="hover:text-background transition-colors">
                                     {siteConfig.email}
                                 </a>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-background/70">
-                                <span aria-hidden="true">🕐</span>
-                                <span>{siteConfig.workingHours}</span>
-                            </div>
+
+
                         </address>
                     </div>
                 </div>

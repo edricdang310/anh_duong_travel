@@ -9,12 +9,11 @@ interface DestinationCardProps {
 
 export function DestinationCard({ destination }: DestinationCardProps) {
     return (
-        <Link
-            href={`/destinations/${destination.slug}`}
-            className="group relative block overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+        <div
+            className="group relative block h-full overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
             aria-label={`Khám phá ${destination.name}, ${destination.country}`}
         >
-            <div className="relative h-64 w-full">
+            <div className="relative h-full w-full">
                 <Image
                     src={destination.image}
                     alt={`Cảnh đẹp ${destination.name}`}
@@ -49,6 +48,6 @@ export function DestinationCard({ destination }: DestinationCardProps) {
                     </div>
                 </div>
             </div>
-        </Link>
+        </div>
     );
 }

@@ -44,12 +44,12 @@ export function HeroSection() {
 
 
             {/* Content */}
-            <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto py-24 pt-32 lg:py-0">
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6 text-white/95 text-sm font-medium">
+                {/* <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6 text-white/95 text-sm font-medium">
                     <span>⭐</span>
                     <span>20+ Năm đồng hành — Hơn 500,000 khách hàng tin tưởng</span>
-                </div>
+                </div> */}
 
                 {/* H1 */}
                 <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
@@ -74,30 +74,20 @@ export function HeroSection() {
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <Button
-                        asChild
-                        size="lg"
-                        className="text-base px-8 py-6 rounded-full font-semibold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                        style={{
-                            background: "linear-gradient(135deg, oklch(0.82 0.16 88), oklch(0.72 0.15 75))",
-                            color: "oklch(0.15 0.04 55)",
-                        }}
-                    >
-                        <Link href="/tours">Xem Tất Cả Tours</Link>
-                    </Button>
+                <div className="flex justify-center items-center">
+                    {/* Liên Hệ Ngay - Glassmorphism style */}
                     <Button
                         asChild
                         variant="outline"
                         size="lg"
-                        className="text-base px-8 py-6 rounded-full font-semibold bg-white/15 border-white/50 text-white hover:bg-white/25 hover:border-white/70 backdrop-blur-sm transition-all duration-300"
+                        className="w-auto min-w-[200px] text-base px-8 sm:px-10 py-6 rounded-full font-bold shadow-xl backdrop-blur-md bg-white/15 border border-white/30 text-white hover:bg-white/25 hover:border-white/50 hover:scale-105 hover:text-white transition-all duration-300"
                     >
-                        <Link href="/contact">Tư Vấn Miễn Phí</Link>
+                        <Link href="/contact">Liên Hệ Ngay</Link>
                     </Button>
                 </div>
 
                 {/* Core Services */}
-                <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+                <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto text-left">
                     {[
                         {
                             icon: "🌍",
@@ -117,11 +107,11 @@ export function HeroSection() {
                     ].map((feature, idx) => (
                         <div
                             key={idx}
-                            className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                            className={`bg-white/10 backdrop-blur-md border border-white/20 p-5 sm:p-6 rounded-2xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 shadow-lg ${idx === 0 ? "col-span-2 md:col-span-1" : "col-span-1"}`}
                         >
-                            <div className="text-3xl mb-4">{feature.icon}</div>
-                            <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                            <p className="text-sm text-white/85 leading-relaxed drop-shadow-sm">{feature.desc}</p>
+                            <div className="text-3xl mb-3 sm:mb-4">{feature.icon}</div>
+                            <h3 className="text-base sm:text-lg font-bold text-white mb-2">{feature.title}</h3>
+                            <p className="text-xs sm:text-sm text-white/85 leading-relaxed drop-shadow-sm">{feature.desc}</p>
                         </div>
                     ))}
                 </div>

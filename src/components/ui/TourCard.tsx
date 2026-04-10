@@ -34,7 +34,7 @@ function StarRating({ rating }: { rating: number }) {
             {Array.from({ length: 5 }).map((_, i) => (
                 <svg
                     key={i}
-                    className={`w-3.5 h-3.5 ${i < full
+                    className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${i < full
                             ? "text-yellow-400 fill-yellow-400"
                             : i === full && decimal >= 0.5
                                 ? "text-yellow-400 fill-yellow-200"
@@ -52,9 +52,9 @@ function StarRating({ rating }: { rating: number }) {
 
 export function TourCard({ tour }: TourCardProps) {
     return (
-        <Card className="group overflow-hidden rounded-2xl border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-0">
+        <Card className="group overflow-hidden rounded-2xl border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-0 flex flex-col h-full w-full">
             {/* Image */}
-            <div className="relative h-52 overflow-hidden">
+            <div className="relative h-48 sm:h-52 overflow-hidden shrink-0">
                 <Image
                     src={tour.image}
                     alt={tour.title}
@@ -64,7 +64,7 @@ export function TourCard({ tour }: TourCardProps) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 <Badge
-                    className="absolute top-3 left-3 bg-primary/90 text-primary-foreground text-xs"
+                    className="absolute top-3 left-3 bg-primary/90 text-primary-foreground text-xs tracking-tight"
                     aria-label={`Danh mục: ${categoryLabels[tour.category]}`}
                 >
                     {categoryLabels[tour.category]}
@@ -74,14 +74,14 @@ export function TourCard({ tour }: TourCardProps) {
                 </div>
             </div>
 
-            <CardContent className="p-5 space-y-3">
+            <CardContent className="p-4 sm:p-5 flex flex-col flex-1 space-y-3">
                 {/* Title */}
-                <h3 className="font-semibold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-base sm:text-lg leading-snug line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem] sm:min-h-[3.375rem]">
                     {tour.title}
                 </h3>
 
                 {/* Destination */}
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1">
                     <span aria-hidden="true">📍</span>
                     {tour.destination}
                 </p>
@@ -89,20 +89,23 @@ export function TourCard({ tour }: TourCardProps) {
                 {/* Rating */}
                 <div className="flex items-center gap-2">
                     <StarRating rating={tour.rating} />
-                    <span className="text-xs text-muted-foreground">
-                        {tour.rating} ({tour.reviewCount} đánh giá)
+                    <span className="text-xs sm:text-sm text-muted-foreground">
+                        {tour.rating} <span>({tour.reviewCount} đánh giá)</span>
                     </span>
                 </div>
 
+                {/* Spacer to push Contact CTA to bottom */}
+                <div className="flex-1"></div>
+
                 {/* Contact CTA */}
-                <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                <div className="flex items-center justify-between pt-3 border-t border-border/50 gap-2 w-full">
                     <div>
                         <p className="text-xs text-muted-foreground">Liên hệ để biết</p>
                         <p className="text-sm font-bold text-primary">Giá & lịch trình</p>
                     </div>
-                    <Button asChild size="sm" className="rounded-full text-xs px-4">
+                    <Button asChild size="sm" className="rounded-full text-xs px-4 h-9">
                         <Link href="/contact" aria-label={`Liên hệ tư vấn tour ${tour.title}`}>
-                            Liên hệ tư vấn
+                            Liên hệ
                         </Link>
                     </Button>
                 </div>

@@ -26,30 +26,29 @@ export function PopularDestinationsSection() {
                     </p>
                 </div>
 
-                {/* Masonry-like grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-auto">
-                    {destinations.map((dest, index) => (
-                        <div
-                            key={dest.id}
-                            className={
-                                index === 0 ? "sm:col-span-2 lg:col-span-1 lg:row-span-1" : ""
-                            }
-                        >
-                            <DestinationCard destination={dest} />
-                        </div>
-                    ))}
-                </div>
+                {/* Responsive Gallery Layout */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 auto-rows-[200px] sm:auto-rows-[250px] md:auto-rows-[300px] lg:auto-rows-[350px] w-full">
+                    {destinations.map((dest, index) => {
+                        let spanClass = "";
+                        if (index === 0) {
+                            // Vịnh Hạ Long (index 0):
+                            // Luôn chiếm 2 hàng.
+                            // Trên Desktop (lg): rộng 50% (2 cột).
+                            spanClass = "row-span-2 lg:col-span-2";
+                        } else {
+                            // Các ảnh nhỏ gọn 1 ô (50% hoặc 25% chiều ngang tuỳ khung hiển thị).
+                            spanClass = "col-span-1 row-span-1";
+                        }
 
-                {/* CTA */}
-                <div className="text-center mt-12">
-                    <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-                        <Link href="/destinations">
-                            Xem tất cả điểm đến
-                            <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                        </Link>
-                    </Button>
+                        return (
+                            <div
+                                key={dest.id}
+                                className={`w-full h-full ${spanClass}`}
+                            >
+                                <DestinationCard destination={dest} />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </section>
